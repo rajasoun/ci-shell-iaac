@@ -94,9 +94,6 @@ RUN set -ex \
 
 COPY ci-shell/dotfiles/.p10k.zsh $HOME/.p10k.zsh
 
-RUN set -ex \
-    && git clone --depth=1 https://github.com/rajasoun/ci-shell-iaac /workspaces/ci-shell-iaac 
-
 WORKDIR /workspaces
 
 # ENTRYPOINT /bin/zsh
