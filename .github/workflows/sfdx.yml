@@ -1,4 +1,4 @@
-name: CI
+name: SFDX
 
 on:
   push:
@@ -8,6 +8,8 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    
+    steps:
 
       - name: IaaC Test SFDX Dev Container
         uses: addnab/docker-run-action@v3
