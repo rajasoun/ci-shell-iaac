@@ -41,13 +41,5 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
-  test:
-    runs-on: ubuntu-latest
-    container:
-      image: ${{ secrets.DOCKERHUB_USERNAME }}/ci-shell:latest
-    steps:
-         - name: Shell Spec Unit Test
-           run: |
-             shellspec -c ci-shell/spec --tag unit,integration,iaac --kcov
 
         
