@@ -20,7 +20,7 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/ci-shell:latest
-          options: --name ci-shell --hostname ci-shell -v "$(pwd):$(pwd)" -v ${{ github.workspace }}:/workspaces -v /var/run/docker.sock:/var/run/docker.sock  -w "$(pwd)"
+          options: --name ci-shell --hostname ci-shell -v "${{ github.workspace }}:${{ github.workspace }}" -v ${{ github.workspace }}:/workspaces -v /var/run/docker.sock:/var/run/docker.sock  -w "${{ github.workspace }}"
           run: |
             ci-shell/dev_container.sh build -d go
             ci-shell/dev_container.sh e2e -d go
