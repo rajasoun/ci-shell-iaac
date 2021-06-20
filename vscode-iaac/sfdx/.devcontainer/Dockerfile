@@ -43,6 +43,12 @@ RUN set -ex \
     && rm -r /var/cache/* /var/lib/apt/lists/*
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# goss - Quick and Easy server validation
+RUN set -ex \
+    && curl -fsSL https://goss.rocks/install | sh
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Node packages
 FROM node:16.3.0-buster-slim as node-packages
 RUN set -ex \

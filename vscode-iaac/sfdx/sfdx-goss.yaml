@@ -1,0 +1,14 @@
+---
+command:
+  cci version:
+    exit-status: 0
+    stdout:
+      - 3.35.0
+    stderr: []
+    timeout: 10000
+  sfdx version:
+    exit-status: 0
+    stdout:
+      - sfdx-cli/7.106.3
+    stderr: []
+    timeout: 10000

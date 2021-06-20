@@ -34,7 +34,7 @@ case ${choice} in
         tear_down
     ;;
     *)
-    echo "${RED}Usage: automator/ci.sh <e2e | taerdown | shell> [-d]${NC}"
+    echo "${RED}Usage: automator/ci.sh <build | e2e | taerdown | shell> [-d]${NC}"
 cat <<-EOF
 Commands:
 ---------
