@@ -4,11 +4,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 source "$SCRIPT_DIR/src/load.sh"
 
-VERBOSE=0
 DEBUG_OFF="" 
 DEBUG_TOGGLE="${2:-$DEBUG_OFF}"
-DEFAULT_SHELL="go"
 
+init_env_variables "sfdx"
 _debug_option "$DEBUG_TOGGLE"
 check jq
 _file_exist "$DEV_CONTAINER_JSON_PATH" 
