@@ -1,6 +1,6 @@
 #shellcheck shell=bash
 
-Describe "e2e System Test : " system
+Describe "e2e System Test : " e2e system
  
     Include src/load.sh
     Context "e2e - check packages : "

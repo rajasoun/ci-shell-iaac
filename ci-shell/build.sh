@@ -5,15 +5,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/src/load.sh"
 
 VERBOSE=0
-DEBUG_TOGGLE="${3:-}"  # If -d is present - debug is on - else off
-
+DEBUG_OFF="" 
+DEBUG_TOGGLE="${2:-$DEBUG_OFF}"
 DEFAULT_SHELL="go"
-SHELL_TYPE="${1:-$DEFAULT_SHELL}" # If shell type not set or null, use default.
-export VERBOSE SHELL_TYPE
 
 _debug_option "$DEBUG_TOGGLE"
 check jq
-_file_exist "$CONFIG_DIR/$CONFIG_FILE" 
+_file_exist "$DEV_CONTAINER_JSON_PATH" 
 
 opt="$1"
 choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )

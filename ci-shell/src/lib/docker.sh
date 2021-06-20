@@ -64,7 +64,7 @@ function e2e_tests(){
     DOCKER_RUN_OPTS="$REMOTE_USER $PORTS $ENVS $MOUNT -w $WORK_DIR $DOCKER_IMAGE $SHELL"
     DOCKER_CMD="$_docker run --sig-proxy=false -a STDOUT -a STDERR  --rm $DOCKER_RUN_OPTS"
     debug "Docker Run Command : $DOCKER_CMD -c shellspec -c ci-shell/spec --tag unit,integration,iaac --kcov"
-    $DOCKER_CMD -c "shellspec -c ci-shell/spec --tag unit,integration,iaac --kcov"
+    $DOCKER_CMD -c "shellspec -c ci-shell/spec --tag e2e --kcov"
 }
 
 function tear_down(){
