@@ -30,18 +30,18 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ./vscode-iaac/go/.devcontainer
-          file: ././vscode-iaac/go/.devcontainer/Dockerfile
+          context: ./vscode-iaac/sfdx/.devcontainer
+          file: ./vscode-iaac/sfdx/.devcontainer/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          tags:  ${{ secrets.DOCKERHUB_USERNAME }}/go-vsc:latest
+          tags:  ${{ secrets.DOCKERHUB_USERNAME }}/sfdx-vsc:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           push: true
 
-      - name: IaaC Test Go Dev Container
+      - name: IaaC Test SFDX Dev Container
         uses: addnab/docker-run-action@v3
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/go-vsc:latest
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/sfdx-vsc:latest
           run: |
             git clone https://github.com/rajasoun/ci-shell-iaac
             cd ci-shell-iaac
