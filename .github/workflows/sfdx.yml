@@ -19,4 +19,4 @@ jobs:
             git clone https://github.com/rajasoun/ci-shell-iaac
             cd ci-shell-iaac
             ci-shell/dev_container.sh build
-            ci-shell/dev_container.sh e2e
+            ci-shell/dev_container.sh e2e -d
