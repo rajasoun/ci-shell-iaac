@@ -19,4 +19,4 @@ Open Terminal
 1. Run `./ci.sh` in getting available options
 1. Run `./ci.sh build` to build the ci-shell container
 1. Run `./ci.sh shell` to launch the ci-shell
-1. 
+1. Run `goss --gossfile ci-shell/iaac/gossfile.goss.yaml validate --format tap` for IaaC Test
