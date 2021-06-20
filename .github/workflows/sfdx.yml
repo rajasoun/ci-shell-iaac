@@ -23,4 +23,4 @@ jobs:
           options: --name ci-shell --hostname ci-shell -v "$(pwd):$(pwd)" -v ${{ github.workspace }}:/workspaces -v /var/run/docker.sock:/var/run/docker.sock  -w "$(pwd)"
           run: |
             ci-shell/dev_container.sh build -d sfdx
-            ci-shell/dev_container.sh e2e -d sfdx
+            # ci-shell/dev_container.sh e2e -d sfdx
