@@ -52,6 +52,11 @@ Describe "Intgeration Test : " integration
             The status should be success
             The output should include "--mount"
         End
+        It "_get_devcontainer_json_corrected should be a valid json"
+            When call _get_devcontainer_json_corrected "$(_get_devcontainer_json)"
+            The status should be success
+            The output should include "Dockerfile"
+        End  
     End 
 End
 
@@ -74,11 +79,6 @@ Describe "Unit Test : " unit
             When run _query_json "$json"
             The status should be failure
             The error should include "QUERY_STRING is Empty!"
-        End  
-        It "_get_devcontainer_json_corrected should be a valid json"
-            When call _get_devcontainer_json_corrected "$(_get_devcontainer_json)"
-            The status should be success
-            The output should include "Dockerfile"
         End  
     End
 End
