@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  build:
+  ci-shell:
     runs-on: ubuntu-latest
     
     steps:
@@ -45,9 +45,9 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/ci-shell:latest
-        run: |
-            git clone https://github.com/rajasoun/ci-shell-iaac
-            cd ci-shell-iaac
-            goss --gossfile ci-shell/iaac/gossfile.goss.yaml validate --format tap
+          run: |
+              git clone https://github.com/rajasoun/ci-shell-iaac
+              cd ci-shell-iaac
+              goss --gossfile ci-shell/iaac/gossfile.goss.yaml validate --format tap
 
         
