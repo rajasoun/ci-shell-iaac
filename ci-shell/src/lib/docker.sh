@@ -65,8 +65,8 @@ function e2e_tests(){
     DOCKER_CMD="$_docker run --sig-proxy=false -a STDOUT -a STDERR  --rm $DOCKER_RUN_OPTS"
     debug "Docker Run Command : $DOCKER_CMD -c shellspec -c ci-shell/spec --tag unit,integration,iaac --kcov"
     $DOCKER_CMD -c "shellspec -c ci-shell/spec --tag e2e --kcov"
-    GOSS_FILE="vscode-iaac/$DEV_SHELL/$DEV_SHELL-goss.yaml"
-    $DOCKER_CMD -c "goss --gossfile $GOSS_FILE validate --format tap"
+    # GOSS_FILE="vscode-iaac/$DEV_SHELL/$DEV_SHELL-goss.yaml"
+    # $DOCKER_CMD -c "goss --gossfile $GOSS_FILE validate --format tap"
 }
 
 function tear_down(){
