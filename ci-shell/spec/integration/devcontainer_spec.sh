@@ -9,14 +9,14 @@ Describe "Intgeration Test : " integration
             The output should include "devcontainer.json  Found!"
             The output should include "Dockerfile"
         End
-        It "_get_devcontainer_json should fail when run from /tmp"
-            cd /tmp || return 1
+        It "_get_devcontainer_json should fail with wrong CONFIG_DIR"
+            DEV_CONTAINER_JSON_PATH="/dummy"
             When run _get_devcontainer_json
             The status should be failure
             The error should include "devcontainer.json Not Found"
         End
         It "_get_docker_file_path should return valid Dockerfile path"
-            Path docker_file="$(_get_git_workspace)/.devcontainer/Dockerfile"
+            Path docker_file="$DEV_CONTAINER_JSON_PATH"
             When call _get_docker_file_path "$(_get_devcontainer_json_corrected)"
             The status should be success
             The output should include ".devcontainer/Dockerfile"

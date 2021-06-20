@@ -5,20 +5,15 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/src/load.sh"
 
 VERBOSE=0
-export VERBOSE
-GIT_WORKSPACE="$(git rev-parse --show-toplevel)"
-APP_NAME=$(basename "$GIT_WORKSPACE")
-WORKSPACE="${GIT_WORKSPACE}"
-CONFIG_DIR="${WORKSPACE}/.devcontainer"
-CONFIG_FILE="devcontainer.json"
-DOCKER_IMAGE="vsc-$APP_NAME:$(git rev-parse HEAD)"
-debug "DOCKER_IMAGE : $DOCKER_IMAGE"
+DEBUG_TOGGLE="${3:-}"  # If -d is present - debug is on - else off
 
+DEFAULT_SHELL="go"
+SHELL_TYPE="${1:-$DEFAULT_SHELL}" # If shell type not set or null, use default.
+export VERBOSE SHELL_TYPE
 
+_debug_option "$DEBUG_TOGGLE"
 check jq
 _file_exist "$CONFIG_DIR/$CONFIG_FILE" 
-# option -d parameter for debug
-_debug_option "$2"
 
 opt="$1"
 choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )

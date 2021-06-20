@@ -93,7 +93,9 @@ RUN set -ex \
     && echo "[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh" >> $HOME/.zshrc
 
 COPY ci-shell/dotfiles/.p10k.zsh $HOME/.p10k.zsh
-COPY ci-shell   /workspaces/ci-shell
+
+RUN set -ex \
+    && git clone --depth=1 https://github.com/rajasoun/ci-shell-iaac /workspaces/ci-shell-iaac 
 
 WORKDIR /workspaces
 
