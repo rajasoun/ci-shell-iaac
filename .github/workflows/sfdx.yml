@@ -16,7 +16,8 @@ jobs:
         with:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/ci-shell:latest
           run: |
+            cd /workspaces
             git clone https://github.com/rajasoun/ci-shell-iaac
             cd ci-shell-iaac
-            ci-shell/dev_container.sh build
-            ci-shell/dev_container.sh e2e -d
+            ci-shell/dev_container.sh build -d sfdx
+            ci-shell/dev_container.sh e2e -d sfdx

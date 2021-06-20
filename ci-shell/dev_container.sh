@@ -6,14 +6,16 @@ source "$SCRIPT_DIR/src/load.sh"
 
 DEBUG_OFF="" 
 DEBUG_TOGGLE="${2:-$DEBUG_OFF}"
+DEV_SHELL="${3:-sfdx}"
 
-init_env_variables "sfdx"
+init_env_variables "$DEV_SHELL"
 _debug_option "$DEBUG_TOGGLE"
 check jq
 _file_exist "$DEV_CONTAINER_JSON_PATH" 
 
 opt="$1"
 choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )
+echo "Starting --> $choice for $DEV_SHELL"
 case ${choice} in
     "e2e")
         export DOCKER_BUILDKIT=1
