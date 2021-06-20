@@ -10,14 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+  
+      - name: Check Out Repo 
+        uses: actions/checkout@v2
 
       - name: IaaC Test Go Dev Container
         uses: addnab/docker-run-action@v3
         with:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/ci-shell:latest
+          options: --name ci-shell --hostname ci-shell -v "$(pwd):$(pwd)" -v ${{ github.workspace }}:/workspaces -v /var/run/docker.sock:/var/run/docker.sock  -w "$(pwd)"
           run: |
-            cd /workspaces
-            git clone https://github.com/rajasoun/ci-shell-iaac
-            cd ci-shell-iaac
             ci-shell/dev_container.sh build -d go
             ci-shell/dev_container.sh e2e -d go
