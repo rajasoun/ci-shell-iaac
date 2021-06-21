@@ -1,25 +1,27 @@
-# Note: You can use any Debian/Ubuntu based image you want.
-FROM mcr.microsoft.com/vscode/devcontainers/base:0-buster AS dind-builder
+# [Choice] Python version: 3, 3.9, 3.8, 3.7, 3.6
+ARG VARIANT=3
+FROM mcr.microsoft.com/vscode/devcontainers/python:${VARIANT} as base-builder
 
-ENV LANG C.UTF-8
+# Copy library scripts to execute
+COPY .devcontainer/library-scripts/*.sh /tmp/library-scripts/
+COPY .devcontainer/packages/*.*         /tmp/packages-tmp/
+COPY .devcontainer/tests                /tests
 
 # [Option] Install zsh
 ARG INSTALL_ZSH="true"
 # [Option] Upgrade OS packages to their latest versions
-ARG UPGRADE_PACKAGES="false"
-# [Option] Enable non-root Docker access in container
-ARG ENABLE_NONROOT_DOCKER="true"
-# [Option] Use the OSS Moby CLI instead of the licensed Docker CLI
-ARG USE_MOBY="true"
-
-# Install needed packages and setup non-root user. Use a separate RUN statement to add your
-# own dependencies. A user of "automatic" attempts to reuse an user ID if one already exists.
-ARG USERNAME=automatic
+ARG UPGRADE_PACKAGES="true"
+# Install needed packages and setup non-root user. Use a separate RUN statement to add your own dependencies.
+ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-COPY library-scripts/*.sh /tmp/library-scripts/
-RUN apt-get update \
-    && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" "true" "true" \
+
+RUN set -ex \
+    && apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    # Remove imagemagick due to https://security-tracker.debian.org/tracker/CVE-2019-10131
+    && apt-get purge -y imagemagick imagemagick-6-common nano \
+    # Install common packages, non-root user
+    && bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" "true" "true" \
     # Use Docker script from script library to set things up
     && /bin/bash /tmp/library-scripts/docker-debian.sh "${ENABLE_NONROOT_DOCKER}" "/var/run/docker-host.sock" "/var/run/docker.sock" "${USERNAME}" "${USE_MOBY}" \
     # Clean up
@@ -31,28 +33,6 @@ RUN apt-get update \
 ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
 CMD [ "sleep", "infinity" ]
 
-# OS packages.
-RUN set -ex \
-    && apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends dpkg-dev gcc g++ make \
-        tzdata libreadline-dev libffi-dev shellcheck python3-dev python3-pip \
-        binutils libcurl4 zlib1g libdw1 zlib1g-dev  \
-        vim netcat jq git-flow firefox-esr \
-    && apt-get autoremove -y  \
-    && apt-get clean -y \
-    && rm -r /var/cache/* /var/lib/apt/lists/*
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
-# goss - Quick and Easy server validation
-RUN set -ex \
-    && curl -fsSL https://goss.rocks/install | sh
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
-# Node packages
-FROM node:16.3.0-buster-slim as node-packages
-RUN set -ex \
-    && npm install -g npm commitizen commitlint release-it sfdx-cli  2>&1
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
@@ -73,55 +53,60 @@ RUN set -ex \
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
-# Python 3 Packages
-FROM python:3.7-slim-buster as python-packages
+# Install Node.js
+FROM base-builder as node-builder
+ARG INSTALL_NODE="true"
+ARG NODE_VERSION="none"
+ENV NVM_DIR=/usr/local/share/nvm
+ENV NVM_SYMLINK_CURRENT=true \
+    PATH=${NVM_DIR}/current/bin:${PATH}
 RUN set -ex \
-    && pip3 --disable-pip-version-check --no-cache-dir install \
-        pipx==0.16.3        \
-        ggshield==1.4.0     \
-        pre-commit==2.12.1  \
-        commitizen==2.17.3  \
-        cruft==2.8.0        \
-        cumulusci==3.35.0   \
-    && rm -rf /tmp/pip-tmp
+    && if [ "$INSTALL_NODE" = "true" ]; then bash /tmp/library-scripts/node-debian.sh "${NVM_DIR}" "${NODE_VERSION}" "${USERNAME}"; fi \
+    && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+# Global node packages.
+RUN set -ex \
+    && CMD="npm install -g npm commitizen commitlint release-it sfdx-cli" \
+    && su vscode -c "source /usr/local/share/nvm/nvm.sh && $CMD" 2>&1
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+
+# Python packages
+FROM node-builder as python-builder
+RUN set -ex \
+    && pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/packages-tmp/requirements.txt
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
-# dev-container
-FROM dind-builder
 
+# OS packages + goss validator
+FROM python-builder as dev-container
+
+RUN set -ex \
+    && apt-get update \
+    && export DEBIAN_FRONTEND=noninteractive \
+    && bash /tmp/library-scripts/install_os_dependencies.sh "install" \
+    && apt-get autoremove -y  \
+    && apt-get clean -y \
+    && rm -r /var/cache/* /var/lib/apt/lists/*
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# Dev Container
+FROM dev-container
 # shellspec
 COPY --from=shellspec-kov-gh   /opt/shellspec                         /opt/shellspec
 # kcov
 COPY --from=shellspec-kov-gh   /usr/local/bin/kcov*                   /usr/local/bin/
 COPY --from=shellspec-kov-gh   /usr/local/share                       /usr/local/share/doc/kcov
-# gh and geckodriver
+# gh
 COPY --from=shellspec-kov-gh   /src                                    /usr/local
+# geckodriver
 COPY --from=shellspec-kov-gh   /usr/local/bin/geckodriver              /usr/local/bin
 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
-# node packages
-COPY --from=node-packages       /usr/local/                /usr/local/
-# Install Node.js
-ENV NVM_DIR="/usr/local/nvm"
-ENV NODE_VERSION=v16.3.0
-RUN set -ex \
-    && mkdir -p $NVM_DIR \
-    && curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
-    && . $NVM_DIR/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION
-
-ENV NODE_PATH="$NVM_DIR/v$NODE_VERSION/lib/node_modules"
-ENV PATH="$NVM_DIR/v$NODE_VERSION/bin:$PATH"
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
-# python packages
-COPY --from=python-packages    /usr/local                   /usr/local
-
-# ENV PATH="/opt/shellspec:/chromedriver:$PATH"
 ENV PATH="/opt/shellspec:$PATH"
 
-RUN set -x \
+# Remove library scripts for final image
+RUN set -ex \
     && apt-get autoremove --assume-yes \
     && apt-get clean --assume-yes \
-    && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/ /chromedriver/chromedriver_*.zip
+    && rm -rf /var/lib/apt/lists/*  \
+    && rm -rf /tmp/library-scripts \
+    && rm -rf /tmp/packages-tmp

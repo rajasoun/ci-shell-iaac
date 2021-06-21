@@ -1,0 +1,35 @@
+#build-essential metapackage install: make, gcc, g++,
+build-essential
+dpkg-dev
+
+#required to translate
+gettext
+
+# dev libs
+gcc
+g++
+make
+tzdata
+libreadline-dev
+libffi-dev
+shellcheck
+binutils
+libcurl4
+zlib1g
+libdw1
+zlib1g-dev
+
+# editor
+vim
+
+# dev toolz
+netcat
+jq
+git-flow
+
+# python
+python3-dev
+python3-pip
+
+# browser
+firefox-esr
