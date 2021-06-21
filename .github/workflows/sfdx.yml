@@ -30,7 +30,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ./vscode-iaac/sfdx/.devcontainer
+          context: ./vscode-iaac/sfdx
           file: ./vscode-iaac/sfdx/.devcontainer/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           tags:  ${{ secrets.DOCKERHUB_USERNAME }}/sfdx-vsc:latest
