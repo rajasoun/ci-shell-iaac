@@ -12,7 +12,7 @@ function load_env_variables(){
     _get_docker_file_path "$CONFIG_JSON" 
     debug "DOCKER_FILE_PATH: $DOCKER_FILE_PATH"
 
-    BUILD_CONTEXT="vscode-iaac/${DEV_SHELL}/.devcontainer"
+    BUILD_CONTEXT="vscode-iaac/${DEV_SHELL}"
     BUILD_ARGS=$(_get_build_args "$CONFIG_JSON")
     debug "BUILD_ARGS : $BUILD_ARGS"
     DOCKER_IMAGE="vsc-$(_get_app_name_from_git_workspace):$(git rev-parse HEAD)"
