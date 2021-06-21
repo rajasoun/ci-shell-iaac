@@ -4,9 +4,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 source "$SCRIPT_DIR/src/load.sh"
 
+DOCKER_BUILDKIT=1
 DEBUG_OFF="" 
 DEBUG_TOGGLE="${2:-$DEBUG_OFF}"
 DEV_SHELL="${3:-sfdx}"
+
+export DOCKER_BUILDKIT
 
 init_env_variables "$DEV_SHELL"
 _debug_option "$DEBUG_TOGGLE"
@@ -18,7 +21,6 @@ choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )
 echo "Starting --> $choice for $DEV_SHELL"
 case ${choice} in
     "e2e")
-        export DOCKER_BUILDKIT=1
         build_container > /dev/null 2>&1
         e2e_tests
         tear_down
@@ -27,8 +29,6 @@ case ${choice} in
         build_container
     ;;
     "shell")
-        _populate_dev_container_env
-        export DOCKER_BUILDKIT=1
         build_container
         shell_2_container
     ;;

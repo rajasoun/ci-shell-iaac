@@ -79,6 +79,10 @@ function _get_shell(){
     [ -n "$CONFIG_JSON" ] || raise_error "Parameter CONFIG_JSON is Empty! "
     ## Get Build Args from CONFIG_JSON
     SHELL=$(_query_json "$CONFIG_JSON" '.settings."terminal.integrated.shell.linux"')
+    if [ "$SHELL" == "null" ]; then
+        # Use default
+        SHELL="/bin/zsh"
+    fi
     echo "$SHELL"
     return 0
 }
