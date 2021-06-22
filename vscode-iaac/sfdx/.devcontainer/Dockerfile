@@ -52,7 +52,7 @@ RUN set -ex \
 
 # Global node packages.
 RUN set -ex \
-    && su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install --no-progress -g npm commitizen commitlint release-it sfdx-cli" 2>&1
+    && bash /tmp/library-scripts/node-packages.sh
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Python packages
