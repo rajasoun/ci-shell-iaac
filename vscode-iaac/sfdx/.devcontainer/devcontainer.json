@@ -30,7 +30,6 @@
 			  "args": ["-l"]
 			}
 		},
-		"terminal.integrated.shell.linux": "/bin/zsh",
 		"python.pythonPath": "/usr/local/bin/python",
 		"python.languageServer": "Pylance",
 		"python.linting.enabled": true,

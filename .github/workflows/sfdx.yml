@@ -37,12 +37,3 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           push: true
-
-      - name: IaaC Test SFDX Dev Container
-        uses: addnab/docker-run-action@v3
-        with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/sfdx-vsc:latest
-          run: |
-            git clone https://github.com/rajasoun/ci-shell-iaac
-            cd ci-shell-iaac
-            ci-shell/dev_container.sh e2e -d sfdx

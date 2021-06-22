@@ -38,12 +38,4 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           push: true
 
-      - name: IaaC Test Go Dev Container
-        uses: addnab/docker-run-action@v3
-        with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/go-vsc:latest
-          run: |
-            git clone https://github.com/rajasoun/ci-shell-iaac
-            cd ci-shell-iaac
-            ci-shell/dev_container.sh e2e -d go
 
