@@ -4,6 +4,7 @@ Generic Continous Intgeration Shell helps in building docker Containers of Visua
 
 ## Launching the CI Shell Container
 
+```
 docker run --rm -it \
     --name ci-shell \
     --hostname ci-shell \
@@ -11,6 +12,7 @@ docker run --rm -it \
     -v /var/run/docker.sock:/var/run/docker.sock  \
     -w "$(pwd)"  \
     rajasoun/ci-shell:latest
+```
 
 ## Getting Started 
 
