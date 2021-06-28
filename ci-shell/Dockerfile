@@ -10,7 +10,7 @@ ENV ZSH_THEME="powerlevel10k/powerlevel10k"
 RUN set -ex \
     && apk add --no-cache --update sudo bash bash-completion \
        git vim zsh-autosuggestions zsh-syntax-highlighting bind-tools curl  \
-       python3 build-base musl py3-pip python3-dev binutils-dev curl-dev elfutils-libelf \
+       python3 build-base musl musl-dev py3-pip python3-dev binutils-dev curl-dev elfutils-libelf \
        jq libc6-compat netcat-openbsd tzdata \
     && rm -rf /var/cache/apk/*
 
@@ -51,6 +51,9 @@ RUN set -ex \
     && npm install -g npm@7.16.0 \
     && npm install -g husky commitizen commitlint release-it
 
+# go
+FROM golang:1.16.5-alpine3.14 as go
+
 # ci-shell
 FROM base
 USER $USER
@@ -80,6 +83,15 @@ COPY --from=gh-cli /root/share  /usr/local/share/
 
 # node.js
 COPY --from=node /usr/local/ /usr/local
+
+# go
+COPY --from=go /usr/local/go /usr/local/go
+ENV GOPATH="$HOME/go"
+ENV PATH="/usr/local/go/bin:$GOPATH/bin:${PATH}"
+
+RUN set -ex \
+    && mkdir -p $GOPATH/bin \
+    && go get -u -v github.com/codeskyblue/fswatch 
 
 # python packages
 RUN set -ex \
