@@ -103,7 +103,6 @@ function check_common_packages(){
         curl \
         wget \
         unzip \
-        nano \
         jq \
         lsb-release \
         ca-certificates \

@@ -90,7 +90,6 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
         ca-certificates \
         unzip \
         zip \
-        nano \
         vim-tiny \
         less \
         jq \

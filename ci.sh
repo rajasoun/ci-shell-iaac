@@ -146,7 +146,7 @@ function run_dev_container_e2e_tests(){
           --hostname $APP_NAME \
           -v $(pwd):$(pwd) -w $(pwd) \
           -v /var/run/docker.sock:/var/run/docker.sock  \
-          $CONTAINER sh -c "ci-shell/dev.sh e2e "
+          $CONTAINER sh -c "ci-shell/dev_container.sh e2e "
   return 0
 }
 
