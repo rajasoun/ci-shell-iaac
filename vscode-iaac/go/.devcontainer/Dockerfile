@@ -33,6 +33,7 @@ RUN set -x \
     && go get -v github.com/cweill/gotests/gotests 2>&1 \
     && go get -v github.com/josharian/impl 2>&1 \
     && go get -v honnef.co/go/tools/cmd/staticcheck 2>&1 \
+    && go get -v github.com/codeskyblue/fswatch 2>&1 \
     && rm -rf $GOPATH/pkg/* $GOPATH/src/* $HOME/.cache/go-build 
 
 # Install global node packages.
