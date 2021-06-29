@@ -15,5 +15,5 @@ command:
   go version:
     exit-status: 0
     stdout:
-      - 1.6
+      - 1.16
     stderr: []
