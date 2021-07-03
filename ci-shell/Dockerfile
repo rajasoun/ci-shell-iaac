@@ -1,5 +1,5 @@
 # base
-FROM docker:19.03.15-dind AS base
+FROM docker:20.10.7-dind AS base
 ARG USER=ci-shell
 ENV TZ=Asia/Kolkata
 ENV HOME=/home/$USER
