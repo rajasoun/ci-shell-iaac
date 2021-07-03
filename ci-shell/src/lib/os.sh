@@ -42,7 +42,8 @@ function _debug_option(){
 # echo message when VERBOSE == 1
 function debug(){
   message=$1
-    if [ "$VERBOSE" == 1 ]; then
+    #if [ "$VERBOSE" == 1 ]; then
+    if [ "$VERBOSE" -eq 1 ]; then
         printf "${ORANGE}\n [DEBUG] %s${NC}\n" "${message}"
     fi
 }
