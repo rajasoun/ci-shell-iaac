@@ -10,7 +10,7 @@ command:
   husky --version:
     exit-status: 0
     stdout:
-      - 6.0.0
+      - 7.0.0
     stderr: []
   gh --version:
     exit-status: 0
