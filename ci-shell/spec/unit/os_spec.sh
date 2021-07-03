@@ -9,7 +9,7 @@ Describe "Unit Test : " unit
             The output should include "Test Debug Message"
         End
         It "debug does not displays message when _debug_option is not set"
-            _debug_option "" #unset debug option explicitly
+            # _debug_option "" #unset debug option explicitly
             When call debug "Test Debug Message"
             The output should not include "Test Debug Message"
         End
