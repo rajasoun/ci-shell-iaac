@@ -35,7 +35,8 @@ function _debug_option(){
   opt="$1" # if -d for debug mode
   choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )
   case ${choice} in
-      -d) VERBOSE=1 ;;
+      -d) VERBOSE="1" ;;
+       *) VERBOSE=""  ;;
   esac
 }
 
@@ -43,7 +44,7 @@ function _debug_option(){
 function debug(){
   message=$1
     #if [ "$VERBOSE" == 1 ]; then
-    if [ "$VERBOSE" -eq 1 ]; then
+    if [ "$VERBOSE" -eq "1" ]; then
         printf "${ORANGE}\n [DEBUG] %s${NC}\n" "${message}"
     fi
 }
