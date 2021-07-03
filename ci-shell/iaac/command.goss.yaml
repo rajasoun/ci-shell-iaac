@@ -7,10 +7,10 @@ command:
     - hello world
     stderr: []
     timeout: 0
-  husky --version:
+  ansible --version:
     exit-status: 0
     stdout:
-      - 7.0.0
+      - 2.10.5
     stderr: []
   gh --version:
     exit-status: 0
