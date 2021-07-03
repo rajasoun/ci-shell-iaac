@@ -11,7 +11,7 @@ RUN set -ex \
     && apk add --no-cache --update sudo bash bash-completion \
        git vim zsh-autosuggestions zsh-syntax-highlighting bind-tools curl  \
        python3 build-base musl musl-dev py3-pip python3-dev binutils-dev curl-dev elfutils-libelf \
-       jq libc6-compat netcat-openbsd tzdata \
+       jq libc6-compat netcat-openbsd tzdata ansible \
     && rm -rf /var/cache/apk/*
 
 # goss - Quick and Easy server validation
