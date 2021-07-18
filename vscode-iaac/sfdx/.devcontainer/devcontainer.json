@@ -1,6 +1,7 @@
 {
 	"name": "Application Profiler",
 	"build": {
+		// "dockerfile": "prebuild/Dockerfile",
 		"dockerfile": "Dockerfile",
 		"context": "..",
 		"args": {
@@ -24,12 +25,7 @@
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
-		"terminal.integrated.profiles.linux": {
-			"zsh (login)": {
-			  "path": "zsh",
-			  "args": ["-l"]
-			}
-		},
+		"terminal.integrated.shell.linux": "/bin/zsh",
 		"python.pythonPath": "/usr/local/bin/python",
 		"python.languageServer": "Pylance",
 		"python.linting.enabled": true,

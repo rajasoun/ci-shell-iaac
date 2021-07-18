@@ -24,5 +24,10 @@ check "shellcheck" shellcheck --version
 check "shellspec"  shellspec --version
 check "firefox"  firefox --version
 check "geckodriver"  geckodriver --version
+check "google-chrome"  google-chrome --version
+check "chromedriver"  chromedriver --version
 # Report result
 reportResults
+
+EXIT_CODE="$?"
+log_sentry "$EXIT_CODE" "e2e_tests.sh "
